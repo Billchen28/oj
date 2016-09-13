@@ -1,8 +1,6 @@
 /*
  * main.c
  *
- *  Created on: 2016年8月20日
- *      Author: 就标
  */
 
 #include <stdio.h>
@@ -10,7 +8,7 @@
 
 #include "sort.h"
 
-#define TEST_SIZE 10
+#define TEST_SIZE 15
 
 int main() {
 	int i, n;

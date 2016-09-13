@@ -1,8 +1,5 @@
 /*
  * sort.c
- *
- *  Created on: 2016年8月20日
- *      Author: 就标
  */
 
 #include "sort.h"
@@ -98,7 +95,6 @@ void merge(int* src, int start, int mid, int end) {
 			src[k++] = left[i++];
 		}
 	}
-	//剩下一边的加上去
 	while (i < left_size) {
 		src[k++] = left[i++];
 	}
@@ -162,25 +158,17 @@ void quick_sort(int* src, int start, int end) {
 	int key = src[start];
 	while (i < j) {
 		while (i < j && key < src[j]) {
-			/*而寻找结束的条件就是，
-			 * 1，找到一个小于或者大于key的数（大于或小于取决于你想升  序还是降序）
-			 * 2，没有符合条件1的，并且i与j的大小没有反转*/
-			j--;/*向前寻找*/
+			j--;
 		}
-		/*找到一个这样的数后就把它赋给前面的被拿走的i的值（如果第一次循环且key是
-			a[left]，那么就是给key）*/
 		src[i] = src[j];
 		while (i < j && key >= src[i]) {
-			/*这是i在当组内向前寻找，同上，不过注意与key的大小关系停止循环和上面相反，
-			        因为排序思想是把数往两边扔，所以左右两边的数大小与key的关系相反*/
 			i++;
 		}
 		src[j] = src[i];
 	}
-	src[i] = key;/*当在当组内找完一遍以后就把中间数key回归*/
-	quick_sort(src, start, i - 1);/*最后用同样的方式对分出来的左边的小组进行同上的做法*/
-	quick_sort(src, i + 1, end);/*用同样的方式对分出来的右边的小组进行同上的做法*/
-	                       /*当然最后可能会出现很多分左右，直到每一组的i = j 为止*/
+	src[i] = key;
+	quick_sort(src, start, i - 1);
+	quick_sort(src, i + 1, end);
 }
 
 
