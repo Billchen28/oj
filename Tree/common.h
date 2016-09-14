@@ -8,9 +8,6 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-//#include <malloc.h>
-#include <sys/malloc.h>
-
 #ifdef _WIN32 // note the underscore: without it, it's not msdn official! 
 #include <malloc.h> 
 #elif __unix__ // all unices 

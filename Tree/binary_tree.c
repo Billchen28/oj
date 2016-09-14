@@ -24,6 +24,34 @@ void free_tree_node(tree_node node) {
 	}
 }
 
+tree_node insert_node_not_recur(tree_node node, int data)
+{
+	tree_node new_node = NULL;
+	tree_node pre = NULL;// 记录上一个结点
+	tree_node t = node;
+	while (t != NULL) {
+		pre = t;
+		if (t->m_data < data) {
+			t = t->m_left;
+		} else {
+			t = t->m_right;
+		}
+	}
+	new_node = new_tree_node();
+	new_node->m_data = data;
+	if (pre == NULL) {
+		node = new_node;
+		return node;
+	} else {
+		if (pre->m_data < data) {
+			pre->m_left = new_node;
+		} else {
+			pre->m_right = new_node;
+		}
+	}
+	return node;
+}
+
 tree_node insert_node(tree_node node, int data) {
 	if (node == NULL) {
 		node = new_tree_node();
@@ -42,7 +70,8 @@ tree_node create_tree(tree_node tree, int* data, int n)
 {
 	int i = 0;
 	for (i = 0; i < n; i++) {
-		tree = insert_node(tree, data[i]);
+//		tree = insert_node(tree, data[i]);
+		tree = insert_node_not_recur(tree, data[i]);
 	}
 	return tree;
 }
