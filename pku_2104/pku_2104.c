@@ -14,6 +14,76 @@ typedef struct result_cache {
 	struct result_cache* next;
 }*result_cache_t, _result_cache;
 
+void showArray_all(int* src, int size) {
+	int i = 0;
+	printf("{");
+	for (i = 0; i < size; i++) {
+		printf("%d,", src[i]);
+	}
+	printf("}");
+}
+
+void showArray(int* src, int s, int e) {
+	int i = 0;
+	printf("{");
+	for (i = s; i < e; i++) {
+		printf("%d,", src[i]);
+	}
+	printf("}\n");
+}
+
+
+void merge(int* src, int start, int mid, int end) {
+	int left_size = mid - start + 1;
+	int right_size = end - mid;
+	if (left_size <= 0 || right_size <= 0) {
+		return;
+	}
+	int* left = (int*)malloc(sizeof(int) * left_size);
+	int* right = (int*)malloc(sizeof(int) * right_size);
+	int i = 0;
+	for (i = 0; i < left_size; i++) {
+		left[i] = src[start + i];
+	}
+	int j = 0;
+	for (j = 0; j < right_size; j++) {
+		right[j] = src[mid + 1 + j];
+	}
+	printf("left:");
+	showArray_all(left, left_size);
+	printf("right:");
+	showArray_all(right, right_size);
+	printf("\n");
+	i = j = 0;
+	int k = start;
+	while (i < left_size && j < right_size) {
+		if (left[i] > right[j]) {
+			src[k++] = right[j++];
+		} else {
+			src[k++] = left[i++];
+		}
+	}
+	while (i < left_size) {
+		src[k++] = left[i++];
+	}
+	while (j < right_size) {
+		src[k++] = right[j++];
+	}
+	free(left);
+	left = 0;
+	free(right);
+	right = 0;
+}
+
+void merge_sort(int* src, int start, int end) {
+	if (end > start) {
+		int mid = (end + start) / 2;
+		merge_sort(src, start, mid);
+		merge_sort(src, mid + 1, end);
+		merge(src, start, mid, end);
+	}
+}
+
 void merge_sort_(int* src, int size) {
 	int* tmp = (int*)malloc(sizeof(int) * size);
 	int i = 0;
@@ -42,6 +112,50 @@ void merge_sort_(int* src, int size) {
 		}
 	}
 	free(tmp);
+}
+
+void select_sort(int* src, int stop_index, int size) {
+	int i = 0;
+	int j = 0;
+	int mini = 0;
+	for (i = 0; i < size - 1;i++) {
+		mini = i;
+		for (j = i + 1;j < size;j++) {
+			if (src[mini] > src[j]) {
+				mini = j;
+			}
+		}
+		if (mini != i) {
+			int temp = src[i];
+			src[i] = src[mini];
+			src[mini] = temp;
+		}
+		if (stop_index >= 0 && i == stop_index) {
+			return;
+		}
+	}
+}
+
+void select_sort_rev(int* src, int stop_index, int size) {
+	int i = 0;
+	int j = 0;
+	int max = 0;
+	for (i = size - 1; i > 0 ;i--) {
+		max = i;
+		for (j = i - 1;j >= 0 ;j--) {
+			if (src[max] < src[j]) {
+				max = j;
+			}
+		}
+		if (max != i) {
+			int temp = src[i];
+			src[i] = src[max];
+			src[max] = temp;
+		}
+		if (stop_index >= 0 && i == stop_index) {
+			return;
+		}
+	}
 }
 
 void addCache(int s, int e, int* result, result_cache_t header) {
@@ -73,9 +187,10 @@ result_cache_t findCache(int s, int e, result_cache_t header) {
 }
 
 void cal(int* src, quest_t q, result_cache_t** cache) {
+	int targetIndex = q->target - 1;
 	result_cache_t c = findCache(q->start, q->end, cache);
 	if(c != 0) {
-		printf("%d\n", c->sorted[q->target - 1]);
+		printf("%d\n", c->sorted[targetIndex]);
 		return;
 	}
 	int* start_p = src;
@@ -83,8 +198,25 @@ void cal(int* src, quest_t q, result_cache_t** cache) {
 	int* temp = (int*)malloc(sizeof(int) * sub_len);
 	start_p += q->start - 1;
 	memcpy(temp, start_p, sizeof(int) * sub_len);
+	int seg_len = sub_len / 3;
+	if (seg_len > 0) {
+		int mid1 = seg_len;
+		int mid2 = seg_len * 2;
+		if (targetIndex <= mid1) {
+			select_sort(temp, targetIndex, sub_len);
+			printf("%d\n", temp[targetIndex]);
+			free(temp);
+			return;
+		} else if (mid1 < targetIndex && targetIndex <= mid2) {
+		} else if (targetIndex > mid2) {
+			select_sort_rev(temp, targetIndex, sub_len);
+			printf("%d\n", temp[targetIndex]);
+			free(temp);
+			return;
+		}
+	}
 	merge_sort_(temp, sub_len);
-	printf("%d\n", temp[q->target - 1]);
+	printf("%d\n", temp[targetIndex]);
 	addCache(q->start, q->end, temp, cache);
 //	free(temp);
 }
@@ -100,7 +232,6 @@ int main() {
 		scanf("%d", &src[i]);
 	}
 	quest_t q_list = (quest_t)malloc(sizeof(_quest) * q_num);
-
 	for (i = 0;i < q_num;i++) {
 		scanf("%d %d %d", &(q_list[i].start), &(q_list[i].end), &(q_list[i].target));
 	}
@@ -110,9 +241,11 @@ int main() {
 	header->e = -1;
 	header->next = 0;
 	header->sorted = 0;
-	for (i = 0;i < q_num;i++) {
-		cal(src, &q_list[i], header);
-	}
+	merge_sort(src, 0, array_size);
+	showArray_all(src, array_size);
+//	for (i = 0;i < q_num;i++) {
+//		cal(src, &q_list[i], header);
+//	}
 	free(src);
 	free(q_list);
 	result_cache_t next = header;

@@ -8,7 +8,7 @@
 
 #include "sort.h"
 
-#define TEST_SIZE 10
+#define TEST_SIZE 15
 
 int main() {
 	int i, n;
