@@ -10,12 +10,14 @@
 #define EH  0
 #define LH  1
 #define RH  -1
+
 typedef struct Bitree
 {
     int data;
     int bf;                                          //该根结点的平衡度
     struct Bitree * lchild,*rchild;
 }Bitree,*BiNtree;
+
 void R_Roate(BiNtree *t);                             //以*t为节点右旋转树
 void L_Roate(BiNtree *t);                             //以*t为节点左旋转树
 void LeftBalance(BiNtree *t);                         //左旋转以平衡该树
@@ -27,6 +29,7 @@ void LeftBalance_div(BiNtree *p,int *shorter);        //删除结点时左平衡
 void RightBalance_div(BiNtree *p,int *shorter);       //删除结点时右平衡旋转处理
 void Delete(BiNtree q,BiNtree *r,int *shorter);       //删除结点
 int DeleteAVL(BiNtree *p,int x,int *shorter);         //平衡二叉树的删除操作
+
 void main()
 {
     int input,search,m;
@@ -81,6 +84,7 @@ void main()
         printf("\t\t按任意键继续..."); getchar();
     }
 }
+
 //以*t为节点右旋转树
 void R_Roate(BiNtree *t)
 {
@@ -90,7 +94,8 @@ void R_Roate(BiNtree *t)
     temp->rchild=*t;
     *t=temp;
 }
- //以*t为节点左旋转树
+
+//以*t为节点左旋转树
 void L_Roate(BiNtree *t)
 {
     BiNtree temp;

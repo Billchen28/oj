@@ -1,8 +1,6 @@
 /*
  * main.c
  *
- *  Created on: 2016年8月20日
- *      Author: 就标
  */
 
 #include <stdio.h>
