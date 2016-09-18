@@ -88,6 +88,21 @@ int get_node_num(tree_node node) {
 	return get_node_num(node->m_left) + get_node_num(node->m_right) + 1;
 }
 
+tree_node search(tree_node node, int target)
+{
+	tree_node n = node;
+	while (n != NULL) {
+		if (n->m_data == target) {
+			return n;
+		} else if (n->m_data < target) {
+			n = n->m_left;
+		} else {
+			n = n->m_right;
+		}
+	}
+	return NULL;
+}
+
 int get_depth(tree_node node)
 {
 	if (node == NULL) {

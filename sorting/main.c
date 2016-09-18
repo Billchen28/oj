@@ -10,6 +10,26 @@
 
 #define TEST_SIZE 15
 
+int bin_search(int* src, int size, int target) {
+	int ret = -1;
+	int start = 0;
+	int end = size - 1;
+	int mid = -1;
+	while (start <= end) {
+		mid = start + (end - start) / 2;
+		int v = src[mid];
+		if (v == target) {
+			ret = mid;
+			break;
+		} else if (v < target) {
+			start = mid + 1;
+		} else {
+			end = mid;
+		}
+	}
+	return ret;
+}
+
 int main() {
 	int i, n;
 	int list[TEST_SIZE] = {3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48};
@@ -24,5 +44,6 @@ int main() {
 	quick_sort(list, 0, TEST_SIZE);
 	printf("\n");
 	showArray(list, TEST_SIZE);
+	printf("\n %d", bin_search(list, TEST_SIZE, 100));
 	return 0;
 }

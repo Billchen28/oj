@@ -20,6 +20,8 @@ void release_tree(tree_node node);
 
 int get_node_num(tree_node node);
 
+tree_node search(tree_node node, int target);
+
 int get_depth(tree_node node);
 
 void pre_traverse(tree_node node, void (*func)(tree_node));

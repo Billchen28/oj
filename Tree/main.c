@@ -27,7 +27,14 @@ int main()
 	printf("tree_depth:%d\n", get_depth(root));
 	pre_traverse(root, printf_node);
 	printf("\n");
-	bfs_traverse(root, printf_node);
+//	bfs_traverse(root, printf_node);
+	tree_node n = search(root, 4);
+	if (n != NULL) {
+		printf("FOUND %d.\n", n->m_data);
+	} else {
+		printf("NOT FOUND.\n");
+	}
+
 	release_tree(root);
 	return 0;
 }
